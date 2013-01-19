@@ -1,18 +1,8 @@
 
 /********************************************************
- * PID RelayOutput Example
- * Same as basic example, except that this time, the output
- * is going to a digital pin which (we presume) is controlling
- * a relay.  The pid is designed to output an analog value,
- * but the relay can only be On/Off.
- *
- *   To connect them together we use "time proportioning
- * control"  Tt's essentially a really slow version of PWM.
- * First we decide on a window size (5000mS say.) We then 
- * set the pid to adjust its output between 0 and that window
- * size.  Lastly, we add some logic that translates the PID
- * output into "Relay On Time" with the remainder of the 
- * window being "Relay Off Time"
+ Modified PID Relay Controller based on online example
+ Authors: Oliver Fang, Will Scheideler
+ Date last updated: 1/19/2013
  ********************************************************/
 
 #include <PID_v1.h>
