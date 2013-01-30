@@ -28,6 +28,7 @@ void setup()
   windowStartTime = millis(); //set to milliseconds
 
   PIDsetup(200, WindowSize);
+  PIDsetup(50, WindowSize);
 
   Serial.begin(9600);
 }
