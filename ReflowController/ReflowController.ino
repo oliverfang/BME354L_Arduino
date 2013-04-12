@@ -3,6 +3,15 @@
 #include <EEPROM.h>
 #include <PID_v1.h>
 
+#define DEBUG 0
+#ifdef DEBUG
+  #define DEBUG_PRINTLN(x)  Serial.println(x)
+  #define DEBUG_PRINT(x)  Serial.print(x)
+#else
+  #define DEBUG_PRINTLN(x)
+  #define DEBUG_PRINT(x)
+#endif
+
 //Initialize LCD Pins
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
@@ -110,8 +119,8 @@ void loop()
     btnPrs = getButtonPress();
     delay(delayTime);
     selectAction(btnPrs);
-    //Serial.println(ovenMode);
-    //Serial.println(confirm);
+    DEBUG_PRINT(ovenMode);
+    DEBUG_PRINTLN(confirm);
   }
   while(ovenMode == 2) //run mode
   {
@@ -127,8 +136,8 @@ void loop()
       while ((millis() - timeRef)/1000 < EEPROM.read(i + numPoints)*timeScale) //while still within the first setpoint time
       {
         int timeLeft = (EEPROM.read(i + numPoints)*timeScale - (millis()-timeRef)/1000);
-        //Serial.println((millis() - timeRef)/1000);
-        //Serial.println(EEPROM.read(i + numPoints)*timeScale);
+        DEBUG_PRINTLN((millis() - timeRef)/1000);
+        DEBUG_PRINTLN(EEPROM.read(i + numPoints)*timeScale);
         lcd.setCursor(11,0);
         printTime(timeLeft);
         int currTemp = runPID();
@@ -437,11 +446,11 @@ int runPID()
   if(now - windowStartTime>WindowSize)
   { //time to shift the Relay Window
     windowStartTime += WindowSize;
-    //Serial.print("Temperature: ");
-    //Serial.println(analogRead(thermocouplePin));
+    DEBUG_PRINT("Temperature: ");
+    DEBUG_PRINTLN(analogRead(thermocouplePin));
 
-    //Serial.print("Output: ");
-    //Serial.println(Output);
+    DEBUG_PRINT("Output: ");
+    DEBUG_PRINTLN(Output);
   }
 
   if(Output > now - windowStartTime) 
@@ -452,7 +461,7 @@ int runPID()
   {
     digitalWrite(relayPin, LOW);
   }
-  //Serial.println(Input);
+  DEBUG_PRINTLN(Input);
   return 2*Input/((1024/maxTemp)*tempScale); //return temperature reading
 }
 
@@ -489,8 +498,7 @@ void printMsg(int state)
  ****************************************************************************************************************/
 void printTime(int time)
 {
-  //Serial.println(timeLeft);
-
+  
   if (time / 60 < 10)
   {
     lcd.print(" "); //space if less than 10 minutes
